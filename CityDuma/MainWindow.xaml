@@ -1,0 +1,17 @@
+﻿<Window x:Class="CityDuma.MainWindows"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Городская дума"
+        WindowStartupLocation="CenterScreen"
+        Height="550" Width="850">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Frame x:Name="MainFrame" Grid.Row="0" NavigationUIVisibility="Hidden" />
+
+        <Button Grid.Row="1" Content="Back" Command="{Binding NavigateBackCommand}" Width="100" HorizontalAlignment="Left" Margin="5" />
+    </Grid>
+</Window>
