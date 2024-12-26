@@ -25,7 +25,7 @@ namespace CityDuma.ViewModels
         }
 
         public ICommand AddCommand { get; set; }
-        public ICommand EditCommand { get; set; }
+        public ICommand SaveChangesCommand { get; set; }
         public ICommand DeleteCommand { get; set; }
 
         public MembersDumaViewModel()
@@ -34,7 +34,7 @@ namespace CityDuma.ViewModels
             Members = new ObservableCollection<MembersDuma>(_dbContext.MembersDuma.ToList());
 
             AddCommand = new RelayCommand(AddMember);
-            EditCommand = new RelayCommand(SaveChanges, CanEditOrDelete);
+            SaveChangesCommand = new RelayCommand(SaveChanges, CanEditOrDelete);
             DeleteCommand = new RelayCommand(DeleteMember, CanEditOrDelete);
         }
 

@@ -1,6 +1,7 @@
 ﻿using CityDuma.Domain.Dto;
 using CityDuma.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -43,27 +44,41 @@ namespace CityDuma.ViewModels
         {
             _dbContext = new AppDbContext();
 
-            var commissions = _dbContext.Commissions.Select(c => new CommissionsDto
-            {
-                CodeMembersCommission = c.CodeMembersCommission,
-                Direction = c.Direction
-            }).ToList();
+            var chairmans = _dbContext.Commissions
+                .Select(c => new ChairmanDto
+                {
+                    Code = c.ChairmanCode,
+                    FullName = c.MembersDuma.Surname + c.MembersDuma.Name + c.MembersDuma.Patronymic
+                })
+                .ToList();
 
-            // Загружаем данные о членах комиссии и связываем их с комиссиями
+            var commissions = _dbContext.Commissions
+                .Include(c => c.MembersDuma)
+                .ThenInclude(c => c.MembersCommission)
+                .AsEnumerable()
+                .Select(c => 
+                    new CommissionsDto
+                    {
+                        CodeMembersCommission = c.CodeMembersCommission,
+                        Chairman = chairmans.FirstOrDefault(ch => ch.Code == c.ChairmanCode),
+                        Direction = c.Direction
+                    })
+                .ToList();
+
             var members = _dbContext.MembersDuma
-                 .Include(m => m.MembersCommission)  // Предположим, что это связь "один к одному" с комиссией
-                 .ThenInclude(mc => mc.Commissions)  // Включаем информацию о комиссии
-                 .Select(m => new CommissionMembersDto
-                 {
-                     CodeMembersDuma = m.CodeMembersDuma,
-                     Surname = m.Surname,
-                     Name = m.Name,
-                     Patronymic = m.Patronymic,
-                     Commission = m.MembersCommission != null
-                                ? commissions.FirstOrDefault(c => c.CodeMembersCommission == m.MembersCommission.CodeMembersCommission)
-                                : null
-                 })
-                 .ToList();
+                .Include(m => m.Commissions)
+                .ThenInclude(m => m.MembersCommission)
+                .AsEnumerable()
+                .Select(m =>
+                    new CommissionMembersDto
+                    {
+                        CodeMembersDuma = m.CodeMembersDuma,
+                        Name = m.Name,
+                        Surname = m.Surname,
+                        Patronymic = m.Patronymic,
+                        Commission = commissions.FirstOrDefault(c => c.CodeMembersCommission == m.MembersCommission?.CodeMembersCommission)
+                    })
+                .ToList();
 
             Commissions = new ObservableCollection<CommissionsDto>(commissions);
             CommissionMembers = new ObservableCollection<CommissionMembersDto>(members);

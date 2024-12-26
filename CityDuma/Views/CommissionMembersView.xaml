@@ -57,30 +57,5 @@
                     VerticalAlignment="Bottom"
                     Margin="10" Width="120" />
         </StackPanel>
-       
-
-        <!--<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Добавить"
-                    Command="{Binding AddCommand}"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Bottom"
-                    Margin="10,0,10,10"
-                    Width="100" />
-            <Button Content="Сохранить"
-                    Command="{Binding SaveCommand}"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Bottom"
-                    Margin="10"
-                    Width="100" />
-
-            <Button Content="Удалить"
-                    Command="{Binding DeleteCommissionCommand}"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Bottom"
-                    Margin="10,0,10,10"
-                    Width="100" />
-        </StackPanel>-->
-
-
     </Grid>
 </Page>
