@@ -14,7 +14,16 @@ namespace CityDuma.ViewModels
         private readonly AppDbContext _dbContext;
 
         public ObservableCollection<CommissionMembersDto> CommissionMembers { get; set; }
-        public ObservableCollection<CommissionsDto> Commissions { get; set; }
+        private ObservableCollection<CommissionsDto> _commissions;
+        public ObservableCollection<CommissionsDto> Commissions
+        {
+            get => _commissions;
+            set
+            {
+                _commissions = value;
+                OnPropertyChanged(nameof(Commissions));
+            }
+        }
 
         private CommissionMembersDto _selectedMember;
         public CommissionMembersDto SelectedMember
@@ -84,7 +93,7 @@ namespace CityDuma.ViewModels
             CommissionMembers = new ObservableCollection<CommissionMembersDto>(members);
 
             SaveChangesCommand = new RelayCommand(SaveChanges);
-            DeleteMemberCommand = new RelayCommand(DeleteMember, CanDeleteMember);
+            DeleteMemberCommand = new RelayCommand(DeleteMemberFromCommission, CanDeleteMember);
         }
 
 
@@ -114,19 +123,29 @@ namespace CityDuma.ViewModels
 
         private bool CanDeleteMember() => SelectedMember != null;
 
-        private void DeleteMember()
+        private void DeleteMemberFromCommission()
         {
             if (SelectedMember != null)
             {
-                var member = _dbContext.MembersDuma.FirstOrDefault(m => m.CodeMembersDuma == SelectedMember.CodeMembersDuma);
+                var member = _dbContext.MembersCommission
+                    .FirstOrDefault(mc => mc.CodeMembersDuma == SelectedMember.CodeMembersDuma
+                                       && mc.CodeMembersCommission == SelectedMember.Commission.CodeMembersCommission);
+
                 if (member != null)
                 {
-                    _dbContext.MembersDuma.Remove(member);
+                    _dbContext.MembersCommission.Remove(member);
                     _dbContext.SaveChanges();
-                    CommissionMembers.Remove(SelectedMember);
                 }
+
+                // Обновляем Commission в выбранном элементе
+                SelectedMember.Commission = null;
+
+                // Обновляем интерфейс
+                OnPropertyChanged(nameof(CommissionMembers));
+                OnPropertyChanged(nameof(SelectedMember));
             }
         }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)

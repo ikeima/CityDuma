@@ -33,12 +33,14 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <ComboBox ItemsSource="{Binding DataContext.Commissions, RelativeSource={RelativeSource AncestorType=Page}}"
-                                          SelectedItem="{Binding Commission, Mode=TwoWay}"
+                                          SelectedItem="{Binding SelectedMember.Commission, Mode=TwoWay}"
                                           DisplayMemberPath="Direction"
+                                          SelectedValuePath="CodeMembersCommission"
                                           Width="150" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Commission.Direction}"/>
                 </GridView>
             </ListView.View>
         </ListView>

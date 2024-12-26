@@ -1,4 +1,5 @@
 ﻿using CityDuma.ViewModels;
+using System.Diagnostics;
 using System.Windows.Controls;
 
 namespace CityDuma.Views
