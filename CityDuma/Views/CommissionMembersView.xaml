@@ -46,13 +46,11 @@
         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
             <Button Content="Сохранить"
                     Command="{Binding SaveChangesCommand}"
-                    IsEnabled="{Binding SelectedMember}"
                     Margin="10" Width="120">
 
             </Button>
             <Button Content="Удалить"
                     Command="{Binding DeleteMemberCommand}"
-                    IsEnabled="{Binding SelectedMember}"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
                     Margin="10" Width="120" />
