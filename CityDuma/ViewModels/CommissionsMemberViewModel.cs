@@ -2,9 +2,11 @@
 using CityDuma.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace CityDuma.ViewModels
@@ -106,7 +108,7 @@ namespace CityDuma.ViewModels
 
                 if (memberCommission != null)
                 {
-                    memberCommission.CodeMembersCommission = member.Commission.CodeMembersCommission;
+                    memberCommission.CodeMembersCommission = member.Commission?.CodeMembersCommission;
                 }
                 else if (member.Commission != null)
                 {
@@ -127,29 +129,38 @@ namespace CityDuma.ViewModels
         {
             if (SelectedMember != null)
             {
-                var member = _dbContext.MembersCommission
+                var memberCommission = _dbContext.MembersCommission
                     .FirstOrDefault(mc => mc.CodeMembersDuma == SelectedMember.CodeMembersDuma
-                                       && mc.CodeMembersCommission == SelectedMember.Commission.CodeMembersCommission);
-
-                if (member != null)
+                                       && mc.CodeMembersCommission == (SelectedMember.Commission != null ? SelectedMember.Commission.CodeMembersCommission : null));
+                
+                if (memberCommission != null)
                 {
-                    _dbContext.MembersCommission.Remove(member);
+                    _dbContext.MembersCommission.Remove(memberCommission);
                     _dbContext.SaveChanges();
                 }
 
-                // Обновляем Commission в выбранном элементе
+                // Сбрасываем выбранную комиссию
+                Console.WriteLine($"Clearing Commission for {SelectedMember.Surname}");
                 SelectedMember.Commission = null;
+                CommissionMembers = new ObservableCollection<CommissionMembersDto>(CommissionMembers);
 
-                // Обновляем интерфейс
+                // Принудительное обновление UI
                 OnPropertyChanged(nameof(CommissionMembers));
                 OnPropertyChanged(nameof(SelectedMember));
             }
         }
 
 
+
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
         {
+            if (PropertyChanged == null)
+            {
+                Console.WriteLine("No subscribers for PropertyChanged!");
+            }
+            Console.WriteLine($"Property changed: {propertyName}");
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }

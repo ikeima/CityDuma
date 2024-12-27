@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace CityDuma.Domain.Dto
 {
@@ -14,14 +15,24 @@ namespace CityDuma.Domain.Dto
             get => _commission;
             set
             {
+                Console.WriteLine($"Commission changed for {Surname}: {value?.Direction ?? "null"}");
                 _commission = value;
                 OnPropertyChanged(nameof(Commission));
             }
         }
 
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
         {
+            if (PropertyChanged == null)
+            {
+                Console.WriteLine("CommissionMembersDto No subscribers for PropertyChanged!");
+            }
+            else
+            {
+                Console.WriteLine($"CommissionMembersDto Property changed: {propertyName}");
+            }
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
