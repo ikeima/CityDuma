@@ -15,10 +15,5 @@ namespace CityDuma.Views
 
             DataContext = new MeetingsViewModel();
         }
-
-        private void TextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
-        {
-            
-        }
     }
 }

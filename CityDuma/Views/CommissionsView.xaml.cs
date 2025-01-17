@@ -20,10 +20,5 @@ namespace CityDuma.Views
             DataContext = new CommissionsViewModel(errorDialogService);
 
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            //NavigationService.Navigate(new CommissionMembersView());
-        }
     }
 }

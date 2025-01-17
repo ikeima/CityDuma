@@ -19,7 +19,6 @@ namespace CityDuma.Views
 
         private void TextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            // Разрешаем ввод только цифр
             if (!char.IsDigit(e.Text, 0))
             {
                 e.Handled = true;

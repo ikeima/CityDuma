@@ -13,7 +13,6 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <!-- Members List -->
             <DataGrid Grid.Row="0" ItemsSource="{Binding Members}" 
               SelectedItem="{Binding SelectedMember}" 
               AutoGenerateColumns="False">
@@ -40,7 +39,6 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-            <!-- Action Buttons -->
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
                 <Button Content="Добавить" Command="{Binding AddCommand}" Width="100" Margin="5" />
                 <Button Content="Сохранить" Command="{Binding SaveChangesCommand}" Width="100" Margin="5" />

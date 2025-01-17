@@ -45,19 +45,6 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    
-                    <!--<GridViewColumn>
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Width="150" 
-                                        Command="{Binding DataContext.CommissionMembersPageOpenCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
-                                        CommandParameter="{Binding}"
-                                        Click="Button_Click">
-                                    Открыть список членов
-                                </Button>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>-->
                 </GridView>
             </ListView.View>
         </ListView>
@@ -81,9 +68,7 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
                     Margin="10,0,10,10"
-                    Width="100" /> 
+                    Width="100" />
         </StackPanel>
-
-
     </Grid>
 </Page>

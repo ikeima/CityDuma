@@ -9,7 +9,6 @@ namespace CityDuma.ViewModels
 {
     public class NavigationViewModel : INotifyPropertyChanged, INavigationService
     {
-        //private readonly Frame _navigationFrame;
         private readonly NavigationService _navigationService;
 
         public ICommand NavigateBackCommand { get; set; }
