@@ -1,4 +1,5 @@
-﻿using CityDuma.ViewModels;
+﻿using CityDuma.Services;
+using CityDuma.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -13,7 +14,9 @@ namespace CityDuma.Views
         {
             InitializeComponent();
 
-            DataContext = new MembersDumaViewModel();
+            var errorDialogService = new ErrorDialogService();
+
+            DataContext = new MembersDumaViewModel(errorDialogService);
         }
     }
 }

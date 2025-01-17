@@ -173,9 +173,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Commands\ShowErrorCommand.cs" />
     <Compile Include="Domain\Dto\ChairmanDto.cs" />
     <Compile Include="Domain\Dto\CommissionMembersDto.cs" />
     <Compile Include="Domain\Dto\CommissionsDto.cs" />
+    <Compile Include="Domain\Dto\MeetingsDto.cs" />
+    <Compile Include="Domain\Dto\OrganizersDto.cs" />
     <Compile Include="Domain\Entities\Commissions.cs" />
     <Compile Include="Domain\Entities\Meetings.cs" />
     <Compile Include="Domain\Entities\MembersCommission.cs" />
@@ -186,20 +190,30 @@
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Services\ErrorDialogService.cs" />
+    <Compile Include="Services\IErrorDialogService.cs" />
     <Compile Include="Services\INavigationService.cs" />
     <Compile Include="Services\NavigationViewModel.cs" />
+    <Compile Include="Services\TimeFormatConverter.cs" />
     <Compile Include="ViewModels\CommissionsMemberViewModel.cs" />
     <Compile Include="ViewModels\CommissionsViewModel.cs" />
+    <Compile Include="ViewModels\MeetingsViewModel.cs" />
     <Compile Include="ViewModels\MembersDumaViewModel.cs" />
-    <Compile Include="ViewModels\RelayCommand.cs" />
+    <Compile Include="ViewModels\OrganizersViewModel.cs" />
     <Compile Include="Views\CommissionMembersView.xaml.cs">
       <DependentUpon>CommissionMembersView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CommissionsView.xaml.cs">
       <DependentUpon>CommissionsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\CompanyView.xaml.cs">
+      <DependentUpon>CompanyView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MeetingsView.xaml.cs">
+      <DependentUpon>MeetingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MembersView.xaml.cs">
       <DependentUpon>MembersView.xaml</DependentUpon>
@@ -210,6 +224,9 @@
     </Compile>
     <Compile Include="Views\MenuView.xaml.cs">
       <DependentUpon>MenuView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OrganizersView.xaml.cs">
+      <DependentUpon>OrganizersView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -223,7 +240,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\CompanyView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MeetingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -232,6 +257,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MenuView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\OrganizersView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

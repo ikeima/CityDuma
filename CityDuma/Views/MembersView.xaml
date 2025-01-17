@@ -28,7 +28,13 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Binding="{Binding PhoneNumber}" Header="Номер телефона" Width="110"/>
+                    <DataGridTextColumn Binding="{Binding PhoneNumber}" Header="Номер телефона" Width="110">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="{x:Type TextBox}">
+                                <Setter Property="MaxLength" Value="10"/>
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
                     <DataGridTextColumn Binding="{Binding Experience}" Header="Стаж" Width="70"/>
                     <DataGridTextColumn Binding="{Binding DateEntryOfDuma}" Header="Дата вступления в думу" Width="*"/>
                 </DataGrid.Columns>

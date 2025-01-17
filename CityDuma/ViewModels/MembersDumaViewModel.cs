@@ -3,7 +3,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
+using CityDuma.Commands;
 using CityDuma.Entities;
+using CityDuma.Services;
 
 namespace CityDuma.ViewModels
 {
@@ -11,7 +13,7 @@ namespace CityDuma.ViewModels
     {
         private AppDbContext _dbContext;
         private MembersDuma _selectedMember;
-
+        private readonly ShowErrorCommand _showErrorCommand;
         public ObservableCollection<MembersDuma> Members { get; set; }
 
         public MembersDuma SelectedMember
@@ -27,8 +29,9 @@ namespace CityDuma.ViewModels
         public ICommand AddCommand { get; set; }
         public ICommand SaveChangesCommand { get; set; }
         public ICommand DeleteCommand { get; set; }
+        public ICommand ShowErrorCommand => _showErrorCommand;
 
-        public MembersDumaViewModel()
+        public MembersDumaViewModel(IErrorDialogService errorDialogService)
         {
             _dbContext = new AppDbContext();
             Members = new ObservableCollection<MembersDuma>(_dbContext.MembersDuma.ToList());
@@ -36,6 +39,8 @@ namespace CityDuma.ViewModels
             AddCommand = new RelayCommand(AddMember);
             SaveChangesCommand = new RelayCommand(SaveChanges, CanEditOrDelete);
             DeleteCommand = new RelayCommand(DeleteMember, CanEditOrDelete);
+
+            _showErrorCommand = new Commands.ShowErrorCommand(errorDialogService);
         }
 
         private void AddMember()
@@ -83,11 +88,18 @@ namespace CityDuma.ViewModels
 
         private void DeleteMember()
         {
-            if (SelectedMember != null && SelectedMember.CodeMembersDuma != 0)
+            try
             {
-                _dbContext.MembersDuma.Remove(SelectedMember);
-                _dbContext.SaveChanges();
-                Members.Remove(SelectedMember);
+                if (SelectedMember != null && SelectedMember.CodeMembersDuma != 0)
+                {
+                    _dbContext.MembersDuma.Remove(SelectedMember);
+                    _dbContext.SaveChanges();
+                    Members.Remove(SelectedMember);
+                }
+            }
+            catch (Exception ex)
+            {
+                _showErrorCommand.Execute("Произошла ошибка при удалении!\nПроверьте, не находится ли удаляемой член думы председателем комиссии или её членом.\nДля корректного удаления воспользуйтесь соответсвующими разделами приложения.");
             }
         }
 

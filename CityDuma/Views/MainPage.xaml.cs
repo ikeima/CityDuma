@@ -40,7 +40,7 @@ namespace CityDuma.Views
 
         private void CompanyButton_Click(object sender, RoutedEventArgs e)
         {
-
+            NavigationService.Navigate(new CompanyView());
         }
 
         private void EmployeesButton_Click(object sender, RoutedEventArgs e)

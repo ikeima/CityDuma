@@ -1,9 +1,9 @@
-﻿using CityDuma.Domain.Dto;
+﻿using CityDuma.Commands;
+using CityDuma.Domain.Dto;
 using CityDuma.Entities;
 using CityDuma.Services;
-
-//using System.Data.Entity;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -12,10 +12,12 @@ using System.Windows.Input;
 
 namespace CityDuma.ViewModels
 {
-    public class CommissionsViewModel : INotifyCollectionChanged
+    public class CommissionsViewModel : INotifyPropertyChanged
     {
         private AppDbContext _dbContext;
         private readonly INavigationService _navigationService;
+        private readonly ShowErrorCommand _showErrorCommand;
+
         public event NotifyCollectionChangedEventHandler CollectionChanged;
         public ObservableCollection<CommissionsDto> Commissions { get; set; }
         public ObservableCollection<CommissionMembersDto> CommissionMembers { get; set; }
@@ -35,14 +37,10 @@ namespace CityDuma.ViewModels
         public ICommand AddCoommissionCommand { get; set; }
         public ICommand SaveCommissionsCommand { get; set; }
         public ICommand DeleteCommissionCommand { get; set; }
+        public ICommand ShowErrorCommand => _showErrorCommand;
 
-        //public ICommand AddCommissionMemberCommand { get; set; }
-        //public ICommand SaveCommissionMembersCommand { get; set; }
-        //public ICommand DeleteCommissionMemberCommand { get; set; }
-
-        public CommissionsViewModel(/*INavigationService navigationService*/)
+        public CommissionsViewModel(IErrorDialogService errorDialogService)
         {
-            //_navigationService = navigationService;
             _dbContext = new AppDbContext();
 
             Chairmans = new ObservableCollection<ChairmanDto>
@@ -78,10 +76,7 @@ namespace CityDuma.ViewModels
             AddCoommissionCommand = new RelayCommand(AddCommission);
             SaveCommissionsCommand = new RelayCommand(SaveCommissionsChanges);
             DeleteCommissionCommand = new RelayCommand(DeleteCommission, CanDeleteCommission);
-
-            //AddCommissionMemberCommand = new RelayCommand(AddCommissionMember);
-            //SaveCommissionMembersCommand = new RelayCommand(SaveCommissionMembersChanges);
-            //DeleteCommissionMemberCommand = new RelayCommand(DeleteSelectedMember);
+            _showErrorCommand = new ShowErrorCommand(errorDialogService);
         }
 
         #region Commission commands
@@ -132,67 +127,17 @@ namespace CityDuma.ViewModels
         {
             if (SelectedCommission != null)
             {
-                var removedCommision = _dbContext.Commissions.FirstOrDefault(c => c.CodeMembersCommission == SelectedCommission.CodeMembersCommission);
-                _dbContext.Commissions.Remove(removedCommision);
-                _dbContext.SaveChanges();
-                Commissions.Remove(SelectedCommission);
-            }
-        }
-        #endregion
-
-        #region CommissionMembers commands
-        private void AddCommissionMember()
-        {
-
-        }
-
-        private void SaveCommissionMembersChanges()
-        {
-
-        }
-
-        private void DeleteSelectedMember()
-        {
-            //var selectedMember = Commissions.FirstOrDefault();
-            //if (selectedMember != null)
-            //{
-            //    var member = _dbContext.MembersDuma.FirstOrDefault(m => m.CodeMembersDuma == selectedMember.CodeMembersDuma);
-            //    var commission = _dbContext.Commissions.FirstOrDefault(c => c.CodeMembersCommission == selectedMember.CodeMembersCommission);
-
-            //    if (member != null && commission != null)
-            //    {
-            //        var memberCommission = _dbContext.MembersCommission
-            //       .FirstOrDefault(mc => mc.CodeMembersCommission == commission.CodeMembersCommission && mc.CodeMembersDuma == member.CodeMembersDuma);
-
-            //        if (memberCommission != null)
-            //        {
-            //            _dbContext.MembersCommission.Remove(memberCommission);
-
-            //            _dbContext.SaveChanges();
-            //            Commissions.Remove(selectedMember);
-            //        }
-            //    }
-            //}
-        }
-
-        private void LoadCommissionMembers(CommissionsDto commission)
-        {
-            if (commission != null)
-            {
-                var commissionMembers = _dbContext.MembersDuma
-                    .Include(md => md.MembersCommission)
-                    .Where(md => md.MembersCommission.CodeMembersCommission == commission.CodeMembersCommission)
-                    .Select(md => new CommissionMembersDto
-                    {
-                        CodeMembersDuma = md.CodeMembersDuma,
-                        Name = md.Name,
-                        Surname = md.Surname,
-                        Patronymic = md.Patronymic
-                    })
-                    .ToList();
-
-                CommissionMembers = new ObservableCollection<CommissionMembersDto>(commissionMembers);
-                
+                try
+                {
+                    var removedCommision = _dbContext.Commissions.FirstOrDefault(c => c.CodeMembersCommission == SelectedCommission.CodeMembersCommission);
+                    _dbContext.Commissions.Remove(removedCommision);
+                    _dbContext.SaveChanges();
+                    Commissions.Remove(SelectedCommission);
+                }
+                catch (Exception ex)
+                {
+                    _showErrorCommand.Execute("Произошла ошибка при удалении комиссии!\nПроверьте, нет ли в удаляемой комиссии зарегистрированных членов думы.");
+                }
             }
         }
         #endregion
