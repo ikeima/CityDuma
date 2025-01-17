@@ -130,8 +130,7 @@ namespace CityDuma.ViewModels
             if (SelectedMember != null)
             {
                 var memberCommission = _dbContext.MembersCommission
-                    .FirstOrDefault(mc => mc.CodeMembersDuma == SelectedMember.CodeMembersDuma
-                                       && mc.CodeMembersCommission == (SelectedMember.Commission != null ? SelectedMember.Commission.CodeMembersCommission : null));
+                    .FirstOrDefault(mc => mc.CodeMembersDuma == SelectedMember.CodeMembersDuma);
                 
                 if (memberCommission != null)
                 {
@@ -139,19 +138,13 @@ namespace CityDuma.ViewModels
                     _dbContext.SaveChanges();
                 }
 
-                // Сбрасываем выбранную комиссию
-                Console.WriteLine($"Clearing Commission for {SelectedMember.Surname}");
                 SelectedMember.Commission = null;
                 CommissionMembers = new ObservableCollection<CommissionMembersDto>(CommissionMembers);
 
-                // Принудительное обновление UI
                 OnPropertyChanged(nameof(CommissionMembers));
                 OnPropertyChanged(nameof(SelectedMember));
             }
         }
-
-
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
